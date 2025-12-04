@@ -1,9 +1,120 @@
-import React from 'react'
+import React, { useState } from "react";
+import { supabase } from "../../src/lib/supabaseClient";
+import { Link } from "react-router-dom";
 
 function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setMessage("");
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    if (data && data.user) {
+      await supabase
+        .from("profiles")
+        .upsert({
+          id: data.user.id,
+          email,
+          prenom,
+          nom,
+        });
+    }
+
+
+    if (data) {
+      setMessage(
+        "Compte créé avec succès. Vérifiez vos emails pour confirmer votre inscription."
+      );
+    }
+
+    setEmail("");
+    setPassword("");
+    setNom("");
+    setPrenom("");
+  };
+
   return (
-    <div>Register</div>
-  )
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-secondary mb-6">
+          Créer un compte
+        </h2>
+
+        {message && (
+          <div className="mb-4 text-center text-sm p-2 rounded ${message.includes('succès') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          <input
+            onChange={(e) => setPrenom(e.target.value)}
+            value={prenom}
+            type="text"
+            placeholder="Prénom"
+            required
+            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+          />
+          <input
+            onChange={(e) => setNom(e.target.value)}
+            value={nom}
+            type="text"
+            placeholder="Nom"
+            required
+            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+          />
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="email"
+            placeholder="Adresse email"
+            required
+            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+          />
+
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type="password"
+            placeholder="Mot de passe"
+            required
+            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+          />
+
+          <button
+            type="submit"
+            className="bg-secondary text-white py-2 rounded-lg hover:bg-secondary-100 transition-colors"
+          >
+            Créer un compte
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <span>Déjà un compte ? </span>
+          <Link
+            to="/login"
+            className="text-secondary font-semibold hover:underline"
+          >
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default Register
+export default Register;

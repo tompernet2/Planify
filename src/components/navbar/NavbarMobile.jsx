@@ -22,11 +22,9 @@ export default function NavbarMobile() {
                 <div></div>
             </div>
 
-            {/* Menu déroulant en dessous - Largeur adaptative */}
+            {/* Nav*/}
             <div
-                className={`absolute left-2 z-50 bg-secondary text-white rounded-2xl overflow-hidden transition-all duration-300 ${
-                    open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                }`}
+                className={`absolute left-2 z-50 bg-secondary text-white rounded-2xl overflow-hidden transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
             >
                 <div className="p-4 w-max">
 
@@ -38,7 +36,7 @@ export default function NavbarMobile() {
                 </div>
             </div>
 
-            {/* Overlay */}
+            {/* cliquer pour fermer la nav */}
             {open && (
                 <div
                     onClick={() => setOpen(false)}

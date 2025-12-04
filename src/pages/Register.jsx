@@ -49,7 +49,7 @@ function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+      <div className="bg-cream-100  rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-secondary mb-6">
           Créer un compte
         </h2>
@@ -67,7 +67,7 @@ function Register() {
             type="text"
             placeholder="Prénom"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-secondary"
           />
           <input
             onChange={(e) => setNom(e.target.value)}
@@ -75,7 +75,7 @@ function Register() {
             type="text"
             placeholder="Nom"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-secondary"
           />
           <input
             onChange={(e) => setEmail(e.target.value)}
@@ -83,7 +83,7 @@ function Register() {
             type="email"
             placeholder="Adresse email"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-secondary"
           />
 
           <input
@@ -92,7 +92,7 @@ function Register() {
             type="password"
             placeholder="Mot de passe"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-secondary"
           />
 
           <button

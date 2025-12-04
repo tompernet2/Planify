@@ -5,11 +5,11 @@ export default function NavButton({ to, icon: Icon, label, onClick = () => {}, m
         <NavLink
             to={to}
             onClick={onClick}
-            className={({ isActive }) => `flex items-center gap-2 px-4 py-3 rounded-full hover:bg-blue-600 transition-colors ${isActive ? "bg-secondary-100   text-cream" : ""}${mini && !mobile ? "justify-center" : ""}`}
+            className={({ isActive }) => `flex items-center gap-2 px-3 py-2 text-cream rounded-full hover:text-primary-hover transition-colors ${isActive ? "text-primary" : ""} ${mini && !mobile ? "justify-center" : ""}`}
         >
             {Icon && <Icon size={24} />}
             {/* Texte visible si : mobile ou desktop normal */}
-            {(mobile || !mini) && <span>{label}</span>}
+            {(mobile || !mini) && <span className="pr-10">{ label}</span>}
         </NavLink>
     );
 }

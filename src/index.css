@@ -16,15 +16,15 @@
 
 body {
   font-family: var(--font-secondary);
-  background-color: #f3f3ed;
+  background-color: #FBF4E6;
 }
 
 @theme {
   --color-primary: #b8e0f8;
   --color-primary-hover: #9dd3f7;
-  --color-secondary: #2a2e32;
-  --color-secondary-100: #4f575e;
-  --color-cream: #f3f3ed;
+  --color-secondary: #111111;
+  --color-secondary-100: #373737;
+  --color-cream: #FBF4E6;
   --color-red: #f8b8b8; 
   --color-red-100: #991B1B;
   --color-red-200: #DC2929;

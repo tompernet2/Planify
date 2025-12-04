@@ -15,13 +15,13 @@ export default function NavbarMobile() {
                 <button onClick={() => setOpen(true)}>
                     <CgMenu  size={28} />
                 </button>
-                <div className="text-xl font-secondary">Planify</div>
+                <div className="text-xl text-white font-secondary">Planify</div>
                 <div></div>
             </div>
 
             {/* Menu déroulant en dessous - Largeur adaptative */}
             <div
-                className={`absolute left-2 z-50 bg-secondary text-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ${
+                className={`absolute left-2 z-50 bg-secondary text-white rounded-2xl overflow-hidden transition-all duration-300 ${
                     open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                 }`}
             >

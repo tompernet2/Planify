@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CgCalendarDates, CgProfile, CgEricsson, CgMenu   } from "react-icons/cg";
+import { CgCalendarDates, CgProfile, CgEricsson, CgMenuLeftAlt      } from "react-icons/cg";
 import NavButton from "../ui/NavButton";
 
 export default function NavbarMobile() {
@@ -11,11 +11,14 @@ export default function NavbarMobile() {
     return (
         <div className="md:hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 bg-secondary text-cream m-2 rounded-2xl">
-                <button onClick={() => setOpen(true)}>
-                    <CgMenu  size={28} />
+            <div className="flex items-center justify-between p-1 bg-secondary m-2 rounded-2xl">
+
+                <button className="bg-primary text-secondary border border-secondary border-4 rounded-xl p-1 transition-all duration-300" onClick={() => setOpen(true)}>
+                    <CgMenuLeftAlt     size={28} />
                 </button>
-                <div className="text-xl text-white font-secondary">Planify</div>
+
+                <div className="text-3xl text-white font-secondary">Planify</div>
+                
                 <div></div>
             </div>
 

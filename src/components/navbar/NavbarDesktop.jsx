@@ -7,20 +7,20 @@ export default function NavbarDesktop() {
 
   return (
     <div className={`hidden md:flex flex-col  bg-secondary  p-4 m-2 rounded-2xl transition-all duration-300 ${mini ? "w-20" : "w-max"}`}>
-      {/* Bouton réduire/agrandir et logo */}
+
       <div className="flex flex-col items-center justify-center gap-2">
-        {/* Bouton réduire/agrandir */}
+
         <div className="relative flex items-center justify-center w-full mb-3 gap-2 ">
 
           {/* Logo */}
           {!mini && (
             <div className="text-4xl font-secondary text-white">Planify</div>
           )}
-
+          {/* Btn Menu */}
           <button
             className={`${mini
-                ? "bg-primary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"
-                : "absolute right-[-30px] bg-primary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"}`}
+                ? "bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"
+                : "absolute right-[-30px] bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"}`}
             onClick={() => setMini(!mini)}>
             {mini ? <CgChevronDoubleRight size={20} /> : <CgChevronDoubleLeft size={20} />}
           </button>
@@ -30,7 +30,6 @@ export default function NavbarDesktop() {
 
       </div>
 
-      {/* Liens du menu avec scroll vertical si nécessaire */}
       <nav className="flex flex-col gap-0 overflow-y-auto h-full pb-4">
         <NavButton to="/" icon={CgProfile} label="Planning" mini={mini} />
         <NavButton to="/login" icon={CgCalendarDates} label="Login" mini={mini} />

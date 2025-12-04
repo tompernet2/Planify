@@ -1,16 +1,15 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-export default function NavButton({ to, icon: Icon, label, mini = false, mobile = false }) {
+export default function NavButton({ to, icon: Icon, label, onClick = () => {}, mini = false, mobile = false }) {
     return (
-        <Link
+        <NavLink
             to={to}
-            className={`flex items-center gap-2 p-2 rounded hover:bg-blue-600 transition-colors
-        ${mini && !mobile ? "justify-center" : ""}
-      `}
+            onClick={onClick}
+            className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-blue-600 transition-colors ${isActive ? "bg-blue-500   text-black" : ""}${mini && !mobile ? "justify-center" : ""}`}
         >
             {Icon && <Icon size={24} />}
             {/* Texte visible si : mobile ou desktop normal */}
             {(mobile || !mini) && <span>{label}</span>}
-        </Link>
+        </NavLink>
     );
 }

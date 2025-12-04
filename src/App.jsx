@@ -12,9 +12,9 @@ export default function App() {
       <NavbarMobile />
 
       {/* Desktop + contenu */}
-      <div className="hidden md:flex min-h-screen">
+      <div className="hidden md:flex h-screen">
         <NavbarDesktop /> {/* sidebar desktop */}
-        <main className="flex-1 p-4">
+        <main className="flex-1 p-4 overflow-auto">
           <Routes>
             <Route path="/" element={<Planning />} />
             <Route path="/login" element={<Login />} />

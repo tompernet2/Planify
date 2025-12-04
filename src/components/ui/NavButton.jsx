@@ -5,7 +5,7 @@ export default function NavButton({ to, icon: Icon, label, onClick = () => {}, m
         <NavLink
             to={to}
             onClick={onClick}
-            className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-blue-600 transition-colors ${isActive ? "bg-blue-500   text-black" : ""}${mini && !mobile ? "justify-center" : ""}`}
+            className={({ isActive }) => `flex items-center gap-2 p-2 rounded-full hover:bg-blue-600 transition-colors ${isActive ? "bg-blue-500   text-black" : ""}${mini && !mobile ? "justify-center" : ""}`}
         >
             {Icon && <Icon size={24} />}
             {/* Texte visible si : mobile ou desktop normal */}

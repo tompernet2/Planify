@@ -32,7 +32,7 @@ function Login() {
 
   return (
     <div className="w-full h-full flex items-center justify-center px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+      <div className="bg-cream-100 shadow-lg rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-secondary mb-6">
           Connexion
         </h2>
@@ -50,7 +50,7 @@ function Login() {
             type="email"
             placeholder="Adresse email"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
           />
 
           <input
@@ -59,7 +59,7 @@ function Login() {
             type="password"
             placeholder="Mot de passe"
             required
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="border border-secondary-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary"
           />
 
           <button

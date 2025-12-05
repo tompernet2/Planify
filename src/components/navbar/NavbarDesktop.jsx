@@ -31,10 +31,10 @@ export default function NavbarDesktop() {
       </div>
 
       <nav className="flex flex-col gap-0 overflow-y-auto h-full pb-4">
-        <NavButton to="/" icon={CgProfile} label="Planning" mini={mini} />
-        <NavButton to="/login" icon={CgCalendarDates} label="Login" mini={mini} />
-        <NavButton to="/register" icon={CgEricsson} label="Register" mini={mini} />
-
+        <NavButton to="/compte" icon={CgProfile} label="Compte" mini={mini} />
+        <NavButton to="/" icon={CgCalendarDates} label="Planning" mini={mini} />
+        {/* <NavButton to="/login" icon={CgCalendarDates} label="Login" mini={mini} />
+        <NavButton to="/register" icon={CgEricsson} label="Register" mini={mini} /> */}
       </nav>
     </div>
   );

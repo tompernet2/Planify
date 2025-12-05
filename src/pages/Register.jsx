@@ -48,8 +48,8 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="bg-cream-100  rounded-2xl p-8 w-full max-w-md">
+    <div className="w-full h-full flex items-center justify-center px-4">
+      <div className="bg-cream-100 rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-secondary mb-6">
           Créer un compte
         </h2>

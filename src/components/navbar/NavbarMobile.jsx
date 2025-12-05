@@ -29,9 +29,10 @@ export default function NavbarMobile() {
                 <div className="p-4 w-max">
 
                     <nav className="flex flex-col text-sm gap-0 whitespace-nowrap">
-                        <NavButton to="/" icon={CgProfile} label="Planning" mobile onClick={closeMenu} />
-                        <NavButton to="/login" icon={CgCalendarDates} label="Login" mobile onClick={closeMenu} />
-                        <NavButton to="/register" icon={CgEricsson} label="Register" mobile onClick={closeMenu} />
+                        <NavButton to="/compte" icon={CgProfile} label="Compte" mobile onClick={closeMenu} />
+                        <NavButton to="/" icon={CgCalendarDates} label="Planning" mobile onClick={closeMenu} />
+                        {/* <NavButton to="/login" icon={CgCalendarDates} label="Login" mobile onClick={closeMenu} />
+                        <NavButton to="/register" icon={CgEricsson} label="Register" mobile onClick={closeMenu} /> */}
                     </nav>
                 </div>
             </div>

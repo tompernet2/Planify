@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CgCalendarDates, CgProfile, CgLogOut , CgChevronDoubleRight, CgChevronDoubleLeft } from "react-icons/cg";
+import { CgCalendarDates, CgProfile, CgLogOut, CgChevronDoubleRight, CgChevronDoubleLeft } from "react-icons/cg";
 import NavButton from "../ui/NavButton";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
@@ -45,7 +45,13 @@ export default function NavbarDesktop() {
         </div>
 
         {/* Bouton déconnexion ici */}
-        <NavButton onClick={handleSignOut} to="/login" icon={CgLogOut} label="Déconnexion" mini={mini} />
+        <button
+          onClick={handleSignOut}
+          className="flex items-center gap-2 px-3 py-2 text-cream rounded-full hover:text-primary-hover transition-colors"
+        >
+          <CgLogOut size={24} />
+          {!mini && <span className="pr-10">Déconnexion</span>}
+        </button>
       </nav>
     </div>
   );

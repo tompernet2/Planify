@@ -90,6 +90,8 @@ export default function Calendar({
 
                 allDaySlot={false}
                 slotEventOverlap={false}
+                eventMinHeight={0}
+                eventShortHeight={0}
 
             />
         </div>

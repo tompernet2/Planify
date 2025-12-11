@@ -58,7 +58,7 @@ export default function CalendarAdmin() {
                 "bg-red-500";
 
     return (
-        <div className={`${bgColor} w-full h-full rounded-lg text-white font-medium flex flex-col justify-center items-center`}>
+        <div className={`${bgColor} w-full h-full rounded-lg text-white font-medium flex flex-col justify-center items-center cursor-pointer`}>
             <div className="text-sm">{eventInfo.event.title}</div>
             <div className="text-xs opacity-80">{eventInfo.timeText}</div>
         </div>

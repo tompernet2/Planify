@@ -28,8 +28,8 @@ export default function NavbarDesktop() {
           {/* Btn Menu */}
           <button
             className={`${mini
-              ? "bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"
-              : "absolute right-[-30px] bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"}`}
+              ? "bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300 cursor-pointer hover:bg-primary-hover"
+              : "absolute right-[-30px] bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300 cursor-pointer hover:bg-primary-hover"}`}
             onClick={() => setMini(!mini) }>
             {mini ? <CgChevronDoubleRight size={20} /> : <CgChevronDoubleLeft size={20} />}
           </button>
@@ -50,7 +50,7 @@ export default function NavbarDesktop() {
           className="flex items-center gap-2 px-3 py-2 text-cream rounded-full hover:text-primary-hover transition-colors"
         >
           <CgLogOut size={24} />
-          {!mini && <span className="pr-10">Déconnexion</span>}
+          {!mini && <span className="pr-10 cursor-pointer">Déconnexion</span>}
         </button>
       </nav>
     </div>

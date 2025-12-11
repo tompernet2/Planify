@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../src/lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
 
 function Compte() {
     const [user, setUser] = useState(null);
@@ -72,8 +71,9 @@ function Compte() {
                 <div className="mb-4">
                     <strong>Rôle :</strong> {profiles.role}
                 </div>
+
+                <button onClick={handleSignOut}>Déconnexion </button>
                 
-                <Button onClick={handleSignOut}>Déconnexion</Button>
             </div>
         </div>
     );

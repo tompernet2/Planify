@@ -5,9 +5,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import { supabase } from "../../lib/supabaseClient";
+import Button from "../ui/Button";
 
 export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
+    const [calendarApi, setCalendarApi] = useState(null);
 
     useEffect(() => {
         const fetchCreneaux = async () => {
@@ -60,38 +62,44 @@ export default function CalendarAdmin() {
         }
     };
 
-    // ✅ Fonction pour styliser après le rendu
-    const handleViewDidMount = () => {
-        // Stylise tous les boutons
-        const buttons = document.querySelectorAll('.fc-button');
-        buttons.forEach(btn => {
-            btn.classList.add('!bg-blue-600', '!border-blue-600', 'hover:!bg-blue-700', '!rounded-lg', '!px-4', '!py-2', '!text-white', '!font-medium', '!transition-colors');
-        });
-
-        // Stylise le titre
-        const title = document.querySelector('.fc-toolbar-title');
-        if (title) {
-            title.classList.add('!text-2xl', '!font-bold', '!text-gray-800');
-        }
-    };
-
     return (
-        <div className="p-4 bg-white rounded-2xl">
+        <div className="p-4 bg-white rounded-2xl space-y-4">
+            {/* Header personnalisé */}
+            <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-800">
+                    {calendarApi?.view.title || "Décembre 2025"}
+                </h2>
+                
+                <div className="flex items-center gap-2">
+                    <Button size="sm" onClick={() => calendarApi?.changeView('timeGridWeek')}>
+                        Semaine
+                    </Button>
+                    <Button size="sm" onClick={() => calendarApi?.changeView('timeGridDay')}>
+                        Jour
+                    </Button>
+                    
+                    <div className="w-px h-6 bg-gray-300 mx-2"></div>
+                    
+                    <Button variant="secondary" size="sm" onClick={() => calendarApi?.today()}>
+                        Aujourd'hui
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => calendarApi?.prev()}>
+                        ←
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => calendarApi?.next()}>
+                        →
+                    </Button>
+                </div>
+            </div>
+
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="timeGridWeek"
                 locale={frLocale}
                 timeZone="Europe/Paris"
                 
-                headerToolbar={{
-                    left: "title",
-                    center: "timeGridWeek,timeGridDay",
-                    right: "today prev,next",
-                }}
-                titleFormat={{
-                    year: "numeric",
-                    month: "long"
-                }}
+                headerToolbar={false} // Désactive le header par défaut
+                
                 dayHeaderFormat={{
                     weekday: "short",
                     day: "numeric"
@@ -104,9 +112,9 @@ export default function CalendarAdmin() {
                 
                 events={events}
                 eventClick={handleEventClick}
-                viewDidMount={handleViewDidMount} // ✅ Appelé après chaque rendu
+                datesSet={(arg) => setCalendarApi(arg.view.calendar)} // Récupère l'API
                 
-                height="85vh"
+                height="75vh"
                 expandRows={true}
                 
                 allDaySlot={false}

@@ -30,7 +30,7 @@ export default function NavbarDesktop() {
             className={`${mini
               ? "bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"
               : "absolute right-[-30px] bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300"}`}
-            onClick={() => setMini(!mini)}>
+            onClick={() => setMini(!mini) }>
             {mini ? <CgChevronDoubleRight size={20} /> : <CgChevronDoubleLeft size={20} />}
           </button>
         </div>

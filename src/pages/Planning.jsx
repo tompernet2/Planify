@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
-import CalendarAdmin from "../components/calendar/CalendarAdmin";
+import CalendarAdmin from "../components/calendar/CalendarAdmin"
+import CalendarClient from "../components/calendar/CalendarClient";
+import CalendarInvite from "../components/calendar/CalendarInvite";
 
 
 function Planning() {
@@ -53,10 +55,11 @@ function Planning() {
   }, []);
 
   return (
-    <div className="p-4 m-5">
-      {!user && <div>Pas connecté</div>}
+    <div className="p-2">
 
       {user && role === "admin" && <CalendarAdmin />}
+      {user && role === "client" && <CalendarClient />}
+      {!user && <CalendarInvite />}
     </div>
   );
 }

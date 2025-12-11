@@ -42,3 +42,8 @@ body {
   --color-purple-200: #973AEB;  
   --color-purple-hover: #BD94F2;  
 }
+.fc-event, .fc-event-main {
+    background: none !important;
+    border: none !important;
+}
+

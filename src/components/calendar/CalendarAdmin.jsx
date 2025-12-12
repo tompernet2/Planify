@@ -55,7 +55,6 @@ export default function CalendarAdmin() {
             return;
         }
         setShowModal(false)
-        alert("Créneau créé !");
         setCurrentDate(new Date());
     };
 
@@ -70,26 +69,24 @@ export default function CalendarAdmin() {
 
         if (error) {
             console.error("Erreur suppression :", error);
-            alert("Impossible de supprimer le créneau");
             return;
         }
         setShowModalDispo(false);
         setSelectedCreneauId(null);
-        setCurrentDate(new Date()); // déclenche le useEffect pour rafraîchir
+        setCurrentDate(new Date()); 
     };
 
 
     const handleEventClick = (info) => {
         const event = info.event;
 
-        // Test du statut
         if (event.extendedProps.status === "occupe") {
             setShowModalOccupe(true)
-            setSelectedCreneauId(event.id); // on stocke l'id
+            setSelectedCreneauId(event.id); // a completer avec les infos de la réservation
         }
         else {
             setShowModalDispo(true)
-            setSelectedCreneauId(event.id); // on stocke l'id
+            setSelectedCreneauId(event.id);
         }
     };
 
@@ -99,8 +96,7 @@ export default function CalendarAdmin() {
 
         const bgColor =
             status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover" :
-                status === "en_attente" ? "bg-yellow-500" :
-                    "bg-red-500";
+                    "bg-purple text-purple-100 hover:bg-purple-hover";
 
         return (
             <div className={`${bgColor} w-full h-full p-1.5 rounded-lg flex flex-col cursor-pointer overflow-hidden `}>
@@ -124,7 +120,7 @@ export default function CalendarAdmin() {
             {/* POP UP */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4 z-60 " onClick={(e) => e.stopPropagation()}>
 
                         <h2 className="text-lg font-semibold">
                             Créer un créneau
@@ -181,7 +177,7 @@ export default function CalendarAdmin() {
 
             {showModalDispo && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalDispo(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4" onClick={(e) => e.stopPropagation()}>
 
                         <h2 className="text-lg font-semibold">
                             Voulez vous supprimer ce créneau
@@ -195,9 +191,10 @@ export default function CalendarAdmin() {
                     </div>
                 </div>
             )}
+
             {showModalOccupe && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalOccupe(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4" onClick={(e) => e.stopPropagation()}>
 
                         <h2 className="text-lg font-semibold">
                             Voici la reservation

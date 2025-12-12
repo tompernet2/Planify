@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Calendar from "./Calendar";
+import Button from "../ui/Button"
+import { useNavigate } from "react-router-dom";
 
-export default function CalendarInvite() {
+
+export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchCreneaux = async () => {
@@ -19,7 +25,7 @@ export default function CalendarInvite() {
 
             const formatted = data.map((c) => ({
                 id: c.id,
-                title: c.status === "disponible" ? "Disponible" : "Réservé",
+                title: c.status,
                 start: c.start,
                 end: c.end,
                 extendedProps: {
@@ -33,31 +39,59 @@ export default function CalendarInvite() {
         fetchCreneaux();
     }, []);
 
-    const handleEventClick = () => {
-        alert("👤 Connectez-vous pour réserver un créneau");
+    const navigateToLogin = () => {
+        navigate("/login");
+    }
+
+    const handleEventClick = (info) => {
+        const event = info.event;
+        if (event.extendedProps.status === "disponible") {
+            setShowModal(true)
+        }
     };
+
 
     const renderEventContent = (eventInfo) => {
         const status = eventInfo.event.extendedProps.status;
-        
-        const bgColor = status === "disponible" ? "bg-green-500" : "bg-red-500";
-        
+
+        const bgColor =
+            status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
+                "bg-purple text-purple-100";
+
         return (
-            <div className={`${bgColor} rounded-lg h-full w-full p-2 text-white font-medium flex flex-col justify-center items-center cursor-pointer hover:opacity-90 transition-opacity`}>
+            <div className={`${bgColor} w-full h-full p-1.5 rounded-lg flex flex-col  overflow-hidden `}>
                 <div className="text-sm">{eventInfo.event.title}</div>
-                <div className="text-xs opacity-80">
-                    {eventInfo.timeText}
-                </div>
+                <div className="text-xs opacity-80">{eventInfo.timeText}</div>
             </div>
         );
     };
 
     return (
-        
-        <Calendar 
-            events={events}
-            onEventClick={handleEventClick}
-            renderEventContent={renderEventContent}
-        />
+        <div className="relative">
+            <Calendar
+                events={events}
+                onEventClick={handleEventClick}
+                renderEventContent={renderEventContent}
+            />
+
+            {/* POP UP */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4 z-60 " onClick={(e) => e.stopPropagation()}>
+
+                        <h2 className="text-lg font-semibold">
+                            Pour vous inscrire veuillez vous connecter
+                        </h2>
+
+                        <div className="flex justify-end gap-2">
+
+                            <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Annuler</Button>
+                            <Button size="sm" onClick={navigateToLogin}>Se connecter</Button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

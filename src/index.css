@@ -21,6 +21,7 @@ body {
 
 @theme {
   --color-primary: #b8e0f8;
+  --color-primary-100: #0B4A70;
   --color-primary-hover: #85CAF3;
   --color-secondary: #111111;
   --color-secondary-100: #373737;

@@ -6,7 +6,11 @@ import Button from "../ui/Button";
 export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showModalOccupe, setShowModalOccupe] = useState(false);
+    const [showModalDispo, setShowModalDispo] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedCreneauId, setSelectedCreneauId] = useState(null);
+
 
 
     useEffect(() => {
@@ -55,16 +59,40 @@ export default function CalendarAdmin() {
         setCurrentDate(new Date());
     };
 
+    // SUPPRIMER CRÉNEAU DISPO
+    const deleteCreneau = async () => {
+        if (!selectedCreneauId) return;
+
+        const { error } = await supabase
+            .from("creneaux")
+            .delete()
+            .eq("id", selectedCreneauId);
+
+        if (error) {
+            console.error("Erreur suppression :", error);
+            alert("Impossible de supprimer le créneau");
+            return;
+        }
+        setShowModalDispo(false);
+        setSelectedCreneauId(null);
+        setCurrentDate(new Date()); // déclenche le useEffect pour rafraîchir
+    };
+
+
     const handleEventClick = (info) => {
         const event = info.event;
 
-        const startHour = event.start.getUTCHours();
-        const endHour = event.end.getUTCHours();
-        const day = event.start.toLocaleDateString('fr-FR');
-        const status = event.extendedProps.status;
-
-        alert(`🔧 ADMIN\nCréneau ID: ${event.id}\nDate: ${day}\nHoraire: ${startHour}h - ${endHour}h\nStatut: ${status}`);
+        // Test du statut
+        if (event.extendedProps.status === "occupe") {
+            setShowModalOccupe(true)
+            setSelectedCreneauId(event.id); // on stocke l'id
+        }
+        else {
+            setShowModalDispo(true)
+            setSelectedCreneauId(event.id); // on stocke l'id
+        }
     };
+
 
     const renderEventContent = (eventInfo) => {
         const status = eventInfo.event.extendedProps.status;
@@ -95,7 +123,7 @@ export default function CalendarAdmin() {
 
             {/* POP UP */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
                     <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
 
                         <h2 className="text-lg font-semibold">
@@ -131,30 +159,53 @@ export default function CalendarAdmin() {
                         />
 
                         <div className="flex justify-end gap-2">
-                            <button
-                                className="px-3 py-2 bg-gray-200 rounded-lg"
-                                onClick={() => setShowModal(false)}
-                            >
-                                Annuler
-                            </button>
 
-                            <button
-                                className="px-3 py-2 bg-blue-600 text-white rounded-lg"
-                                onClick={() => {
-                                    const d = document.getElementById("c-date").value;
-                                    const s = document.getElementById("c-start").value;
-                                    const e = document.getElementById("c-end").value;
+                            <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Annuler</Button>
+                            <Button size="sm" onClick={() => {
+                                const d = document.getElementById("c-date").value;
+                                const s = document.getElementById("c-start").value;
+                                const e = document.getElementById("c-end").value;
 
-                                    if (!d || !s || !e) {
-                                        alert("Veuillez remplir tous les champs");
-                                        return;
-                                    }
+                                if (!d || !s || !e) {
+                                    alert("Veuillez remplir tous les champs");
+                                    return;
+                                }
 
-                                    createCreneau(d, s, e);
-                                }}
-                            >
-                                Créer
-                            </button>
+                                createCreneau(d, s, e);
+                            }}>Créer</Button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {showModalDispo && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalDispo(false)}>
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+
+                        <h2 className="text-lg font-semibold">
+                            Voulez vous supprimer ce créneau
+                        </h2>
+                        <div className="flex justify-end gap-2">
+
+                            <Button variant="secondary" size="sm" onClick={() => setShowModalDispo(false)}>Annuler</Button>
+                            <Button size="sm" onClick={deleteCreneau}>Supprimer</Button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+            {showModalOccupe && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalOccupe(false)}>
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+
+                        <h2 className="text-lg font-semibold">
+                            Voici la reservation
+                        </h2>
+                        <div className="flex justify-end gap-2">
+
+                            <Button variant="secondary" size="sm" onClick={() => setShowModalOccupe(false)}>Fermer</Button>
+                            <Button size="sm" onClick={() => { }}>Supprimer</Button>
                         </div>
 
                     </div>

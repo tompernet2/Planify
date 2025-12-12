@@ -5,6 +5,9 @@ import Button from "../ui/Button";
 
 export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [currentDate, setCurrentDate] = useState(new Date());
+
 
     useEffect(() => {
         const fetchCreneaux = async () => {
@@ -20,12 +23,7 @@ export default function CalendarAdmin() {
 
             const formatted = data.map((c) => ({
                 id: c.id,
-                title:
-                    c.status === "disponible"
-                        ? "Disponible"
-                        : c.status === "en_attente"
-                            ? "En attente"
-                            : "Réservé",
+                title: c.status,
                 start: c.start,
                 end: c.end,
                 extendedProps: {
@@ -37,7 +35,25 @@ export default function CalendarAdmin() {
         };
 
         fetchCreneaux();
-    }, []);
+    }, [currentDate]);
+
+    // CRÉATION CRÉNEAU
+    const createCreneau = async (date, heureDebut, heureFin) => {
+        const start = `${date}T${heureDebut}:00`;
+        const end = `${date}T${heureFin}:00`;
+
+        const { error } = await supabase
+            .from("creneaux")
+            .insert([{ start, end, status: "disponible" }]);
+
+        if (error) {
+            console.error("Erreur création créneau :", error);
+            return;
+        }
+        setShowModal(false)
+        alert("Créneau créé !");
+        setCurrentDate(new Date());
+    };
 
     const handleEventClick = (info) => {
         const event = info.event;
@@ -63,24 +79,88 @@ export default function CalendarAdmin() {
                 <div className="text-sm">{eventInfo.event.title}</div>
                 <div className="text-xs opacity-80">{eventInfo.timeText}</div>
             </div>
-
         );
     };
 
-
-
     return (
-
-        <div className="relative" >
+        <div className="relative">
             <div className="fixed bottom-10 right-10 md:absolute md:bottom-5 md:right-5 z-10">
-                <Button variant="bulle">+</Button>
+                <Button variant="bulle" onClick={() => setShowModal(true)}>+</Button>
             </div>
-
             <Calendar
                 events={events}
                 onEventClick={handleEventClick}
                 renderEventContent={renderEventContent}
             />
+
+            {/* POP UP */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4">
+
+                        <h2 className="text-lg font-semibold">
+                            Créer un créneau
+                        </h2>
+
+                        <input
+                            type="date"
+                            id="c-date"
+                            className="w-full border rounded px-3 py-2"
+                        />
+
+                        <select
+                            id="c-start"
+                            className="w-full border rounded px-3 py-2"
+                            onChange={(e) => {
+                                const h = e.target.value;
+                                document.getElementById("c-end").value = `${String(Number(h) + 1).padStart(2, "0")}:00`;
+                            }}
+                        >
+                            {Array.from({ length: 11 }).map((_, i) => {
+                                const hour = (8 + i).toString().padStart(2, "0");
+                                return <option key={hour} value={hour}>{hour}:00</option>;
+                            })}
+                        </select>
+
+
+                        <input
+                            type="time"
+                            id="c-end"
+                            className="w-full border rounded px-3 py-2 bg-gray-100 text-gray-600"
+                            disabled
+                        />
+
+                        <div className="flex justify-end gap-2">
+                            <button
+                                className="px-3 py-2 bg-gray-200 rounded-lg"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Annuler
+                            </button>
+
+                            <button
+                                className="px-3 py-2 bg-blue-600 text-white rounded-lg"
+                                onClick={() => {
+                                    const d = document.getElementById("c-date").value;
+                                    const s = document.getElementById("c-start").value;
+                                    const e = document.getElementById("c-end").value;
+
+                                    if (!d || !s || !e) {
+                                        alert("Veuillez remplir tous les champs");
+                                        return;
+                                    }
+
+                                    createCreneau(d, s, e);
+                                }}
+                            >
+                                Créer
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

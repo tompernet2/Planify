@@ -14,7 +14,6 @@ export default function Calendar({
     const [calendarApi, setCalendarApi] = useState(null);
     const containerRef = useRef(null); // <-- ajout
 
-    // <-- ResizeObserver pour recalcul automatique
     useEffect(() => {
         if (!containerRef.current || !calendarApi) return;
 
@@ -28,8 +27,8 @@ export default function Calendar({
     }, [calendarApi]);
 
     return (
-        <div ref={containerRef} className="p-4 bg-white rounded-2xl space-y-4"> {/* <-- ajout ref */}
-            {/* Header personnalisé */}
+        <div ref={containerRef} className="p-4 bg-white rounded-2xl space-y-4"> 
+
             <div className="flex items-center justify-between flex-wrap">
                 <h2 className="text-2xl font-bold text-gray-800">
                     {calendarApi?.view.title || "Décembre 2025"}
@@ -88,7 +87,6 @@ export default function Calendar({
                 height="85vh"
                 expandRows={true}
                 allDaySlot={false}                
-                
             />
         </div>
     );

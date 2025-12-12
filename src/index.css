@@ -21,7 +21,7 @@ body {
 
 @theme {
   --color-primary: #b8e0f8;
-  --color-primary-hover: #9dd3f7;
+  --color-primary-hover: #85CAF3;
   --color-secondary: #111111;
   --color-secondary-100: #373737;
   --color-cream: #FBF4E6;
@@ -45,6 +45,7 @@ body {
 .fc-event, .fc-event-main {
     background: none !important;
     border: none !important;
+    border-radius:12px;
 }
 
 

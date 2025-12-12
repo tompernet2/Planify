@@ -30,12 +30,12 @@ export default function Calendar({
     return (
         <div ref={containerRef} className="p-4 bg-white rounded-2xl space-y-4"> {/* <-- ajout ref */}
             {/* Header personnalisé */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap">
                 <h2 className="text-2xl font-bold text-gray-800">
                     {calendarApi?.view.title || "Décembre 2025"}
                 </h2>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <Button size="sm" onClick={() => calendarApi?.changeView('timeGridWeek')}>
                         Semaine
                     </Button>
@@ -87,12 +87,8 @@ export default function Calendar({
 
                 height="85vh"
                 expandRows={true}
-
-                allDaySlot={false}
-                slotEventOverlap={false}
-                eventMinHeight={0}
-                eventShortHeight={0}
-
+                allDaySlot={false}                
+                
             />
         </div>
     );

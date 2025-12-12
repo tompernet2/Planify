@@ -53,6 +53,7 @@ export default function CalendarInvite() {
     };
 
     return (
+        
         <Calendar 
             events={events}
             onEventClick={handleEventClick}

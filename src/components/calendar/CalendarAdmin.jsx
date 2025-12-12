@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Calendar from "./Calendar";
+import Button from "../ui/Button";
 
 export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
@@ -50,28 +51,36 @@ export default function CalendarAdmin() {
     };
 
     const renderEventContent = (eventInfo) => {
-    const status = eventInfo.event.extendedProps.status;
+        const status = eventInfo.event.extendedProps.status;
 
-    const bgColor =
-        status === "disponible" ? "bg-green-500" :
-            status === "en_attente" ? "bg-yellow-500" :
-                "bg-red-500";
+        const bgColor =
+            status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover" :
+                status === "en_attente" ? "bg-yellow-500" :
+                    "bg-red-500";
+
+        return (
+            <div className={`${bgColor} w-full h-full p-1.5 rounded-lg flex flex-col cursor-pointer overflow-hidden `}>
+                <div className="text-sm">{eventInfo.event.title}</div>
+                <div className="text-xs opacity-80">{eventInfo.timeText}</div>
+            </div>
+
+        );
+    };
+
+
 
     return (
-        <div className={`${bgColor} w-full h-full rounded-lg text-white font-medium flex flex-col justify-center items-center cursor-pointer`}>
-            <div className="text-sm">{eventInfo.event.title}</div>
-            <div className="text-xs opacity-80">{eventInfo.timeText}</div>
+
+        <div className="relative" >
+            <div className="fixed bottom-10 right-10 md:absolute md:bottom-5 md:right-5 z-10">
+                <Button variant="bulle">+</Button>
+            </div>
+
+            <Calendar
+                events={events}
+                onEventClick={handleEventClick}
+                renderEventContent={renderEventContent}
+            />
         </div>
-    );
-};
-
-
-
-    return (
-        <Calendar
-            events={events}
-            onEventClick={handleEventClick}
-            renderEventContent={renderEventContent}
-        />
     );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CgCalendarDates, CgProfile, CgLogOut, CgMenuLeftAlt } from "react-icons/cg";
 import NavButton from "../ui/NavButton";
 import { useNavigate } from "react-router-dom";
@@ -6,16 +6,38 @@ import { supabase } from "../../lib/supabaseClient";
 
 export default function NavbarMobile() {
     const [open, setOpen] = useState(false);
+    const [admin, setAdmin] = useState(false);
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+
     const navigate = useNavigate();
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
+        setCurrentDate(new Date());
         navigate("/login");
     };
 
     const closeMenu = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        const checkAdmin = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return setAdmin(false);
+
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", session.user.id)
+                .single();
+
+            setAdmin(profile?.role === "admin");
+        };
+
+        checkAdmin();
+    }, [currentDate]);
 
 
 
@@ -42,9 +64,9 @@ export default function NavbarMobile() {
                     <nav className="flex flex-col text-sm gap-0 whitespace-nowrap">
                         <NavButton to="/compte" icon={CgProfile} label="Compte" mobile onClick={closeMenu} />
                         <NavButton to="/" icon={CgCalendarDates} label="Planning" mobile onClick={closeMenu} />
-                        {/* <NavButton to="/login" icon={CgCalendarDates} label="Login" mobile onClick={closeMenu} />
-                        <NavButton to="/register" icon={CgEricsson} label="Register" mobile onClick={closeMenu} /> */}
-
+                        {admin && (
+                            <NavButton to="/reservation" icon={CgCalendarDates} label="Réservations" mobile onClick={closeMenu} />
+                        )}
                         <button
                             onClick={handleSignOut}
                             className="flex items-center gap-2 px-3 py-2 text-cream rounded-full hover:text-primary-hover transition-colors"

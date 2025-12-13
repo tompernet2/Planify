@@ -1,31 +1,45 @@
 import React, { useEffect, useState } from "react";
-import {supabase} from "../../src/lib/supabaseClient";
+import { supabase } from "../../src/lib/supabaseClient";
 import { Navigate } from "react-router-dom";
 
-function Wrapper({ children }) {
-  const [authenticated, setAuthenticated] = useState(false);
+function AdminWrapper({ children }) {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+    const checkAdmin = async () => {
+      // 1. Récupère la session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
 
-      setAuthenticated(!!session);
+      // 2. Récupère le profil correspondant dans la table profiles
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("statut")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error || !profile) {
+        setIsAdmin(false);
+      } else {
+        // 3. Vérifie le statut
+        setIsAdmin(profile.statut === "admin");
+      }
+
       setLoading(false);
     };
-    getSession();
+
+    checkAdmin();
   }, []);
 
-  if (loading) {
-    return <div>loading ...</div>;
-  } else {
-    if (authenticated) {
-      return <>{children}</>;
-    }
-    return <Navigate to="/login" />;
-  }
+  if (loading) return <div>Loading ...</div>;
+  if (!isAdmin) return <Navigate to="/" />;
+
+  return <>{children}</>;
 }
 
-export default Wrapper;
+export default AdminWrapper;

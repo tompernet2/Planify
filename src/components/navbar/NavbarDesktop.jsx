@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CgCalendarDates, CgProfile, CgLogOut, CgChevronDoubleRight, CgChevronDoubleLeft } from "react-icons/cg";
 import NavButton from "../ui/NavButton";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,35 @@ import { supabase } from "../../lib/supabaseClient";
 
 export default function NavbarDesktop() {
   const [mini, setMini] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    setCurrentDate(new Date());
     navigate("/login");
   };
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return setAdmin(false);
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
+
+      setAdmin(profile?.role === "admin");
+    };
+
+    checkAdmin();
+  }, [currentDate]);
+
+
 
   return (
     <div className={`hidden md:flex flex-col  bg-secondary  p-4 m-2 rounded-2xl transition-all duration-300 ${mini ? "w-20" : "w-max"}`}>
@@ -30,7 +53,7 @@ export default function NavbarDesktop() {
             className={`${mini
               ? "bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300 cursor-pointer hover:bg-primary-hover"
               : "absolute right-[-30px] bg-primary text-secondary border border-secondary border-4 rounded-full p-0.5 transition-all duration-300 cursor-pointer hover:bg-primary-hover"}`}
-            onClick={() => setMini(!mini) }>
+            onClick={() => setMini(!mini)}>
             {mini ? <CgChevronDoubleRight size={20} /> : <CgChevronDoubleLeft size={20} />}
           </button>
         </div>
@@ -42,6 +65,10 @@ export default function NavbarDesktop() {
         <div className="flex flex-col gap-0">
           <NavButton to="/compte" icon={CgProfile} label="Compte" mini={mini} />
           <NavButton to="/" icon={CgCalendarDates} label="Planning" mini={mini} />
+          {admin && (
+            <NavButton to="/reservation" icon={CgCalendarDates} label="Réservations" mini={mini} />
+          )}
+
         </div>
 
         {/* Bouton déconnexion ici */}

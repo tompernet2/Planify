@@ -43,12 +43,6 @@ function Compte() {
         return () => subscription.unsubscribe();
     }, [navigate]);
 
-    const handleSignOut = async () => {
-        await supabase.auth.signOut();
-        setUser(null);
-        navigate("/login");
-    };
-
     if (!user || !profiles) return null;
 
     return (
@@ -68,12 +62,9 @@ function Compte() {
                     <strong>Email :</strong> {user.email}
                 </div>
 
-                <div className="mb-4">
+                <div>
                     <strong>Rôle :</strong> {profiles.role}
-                </div>
-
-                <button onClick={handleSignOut}>Déconnexion </button>
-                
+                </div>                
             </div>
         </div>
     );

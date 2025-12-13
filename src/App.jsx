@@ -5,6 +5,8 @@ import Planning from "./pages/Planning";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Compte from "./pages/Compte";
+import Reservation from "./pages/Reservation";
+import Wrapper from "./pages/Wrapper";
 
 export default function App() {
   return (
@@ -18,6 +20,7 @@ export default function App() {
             <Route path="/compte" element={<Compte />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/reservation" element={<Reservation />} />
           </Routes>
         </main>
       </div>
@@ -30,6 +33,8 @@ export default function App() {
           <Route path="/compte" element={<Compte />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reservation" element={<Reservation />} />
+
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {supabase} from "../../src/lib/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ function Login() {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (event) => {
+    
     event.preventDefault();
     setMessage("");
 
@@ -25,6 +26,7 @@ function Login() {
     }
 
     if (data) {
+      window.location.reload();
       navigate("/");
       return null;
     }

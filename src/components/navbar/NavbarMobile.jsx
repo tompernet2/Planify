@@ -16,6 +16,7 @@ export default function NavbarMobile() {
         await supabase.auth.signOut();
         setCurrentDate(new Date());
         navigate("/login");
+        closeMenu();
     };
 
     const closeMenu = () => {

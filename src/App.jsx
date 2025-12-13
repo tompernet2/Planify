@@ -20,7 +20,7 @@ export default function App() {
             <Route path="/compte" element={<Compte />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/reservation" element={<Reservation />} />
+            <Route path="/reservation" element={<Wrapper><Reservation /></Wrapper>} />
           </Routes>
         </main>
       </div>
@@ -33,7 +33,7 @@ export default function App() {
           <Route path="/compte" element={<Compte />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/reservation" element={<Reservation />} />
+          <Route path="/reservation" element={<Wrapper><Reservation /></Wrapper>} />
 
         </Routes>
       </div>

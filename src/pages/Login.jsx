@@ -26,8 +26,8 @@ function Login() {
     }
 
     if (data) {
-      window.location.reload();
       navigate("/");
+      window.location.reload();
       return null;
     }
   };

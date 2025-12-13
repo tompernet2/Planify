@@ -8,7 +8,6 @@ function AdminWrapper({ children }) {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      // 1. Récupère la session
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setIsAdmin(false);
@@ -16,7 +15,6 @@ function AdminWrapper({ children }) {
         return;
       }
 
-      // 2. Récupère le profil correspondant dans la table profiles
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("statut")
@@ -26,7 +24,6 @@ function AdminWrapper({ children }) {
       if (error || !profile) {
         setIsAdmin(false);
       } else {
-        // 3. Vérifie le statut
         setIsAdmin(profile.statut === "admin");
       }
 

@@ -3,6 +3,7 @@ import { supabase } from "../../lib/supabaseClient";
 import Calendar from "./Calendar";
 import Button from "../ui/Button"
 import { useNavigate } from "react-router-dom";
+import Modal from "../ui/Modal";
 
 
 export default function CalendarInvite() {

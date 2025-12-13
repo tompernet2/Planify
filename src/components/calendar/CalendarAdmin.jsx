@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Calendar from "./Calendar";
 import Button from "../ui/Button";
+import Modal from "../ui/Modal";
 
 export default function CalendarAdmin() {
     const [events, setEvents] = useState([]);
@@ -72,7 +73,7 @@ export default function CalendarAdmin() {
         }
         setShowModalDispo(false);
         setSelectedCreneauId(null);
-        setCurrentDate(new Date()); 
+        setCurrentDate(new Date());
     };
 
 
@@ -82,7 +83,7 @@ export default function CalendarAdmin() {
 
         if (event.extendedProps.statut === "occupe") {
             setShowModalOccupe(true)
-             // a completer avec les infos de la réservation
+            // a completer avec les infos de la réservation
         }
         else {
             setShowModalDispo(true)
@@ -95,7 +96,7 @@ export default function CalendarAdmin() {
 
         const bgColor =
             statut === "disponible" ? "bg-green text-green-100 hover:bg-green-hover" :
-                    "bg-purple text-purple-100 hover:bg-purple-hover";
+                "bg-purple text-purple-100 hover:bg-purple-hover";
 
         return (
             <div className={`${bgColor} w-full h-full p-1.5 rounded-lg flex flex-col cursor-pointer overflow-hidden `}>
@@ -116,97 +117,104 @@ export default function CalendarAdmin() {
                 renderEventContent={renderEventContent}
             />
 
-            {/* POP UP */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4 z-60 " onClick={(e) => e.stopPropagation()}>
+            <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title="Créer un créneau"
+            >
+                <input
+                    type="date"
+                    id="c-date"
+                    className="w-full border rounded px-3 py-2"
+                />
 
-                        <h2 className="text-lg font-semibold">
-                            Créer un créneau
-                        </h2>
+                <select
+                    id="c-start"
+                    className="w-full border rounded px-3 py-2"
+                    onChange={(e) => {
+                        const h = e.target.value;
+                        document.getElementById("c-end").value =
+                            `${String(Number(h) + 1).padStart(2, "0")}:00`;
+                    }}
+                >
+                    {Array.from({ length: 11 }).map((_, i) => {
+                        const hour = (8 + i).toString().padStart(2, "0");
+                        return (
+                            <option key={hour} value={hour}>
+                                {hour}:00
+                            </option>
+                        );
+                    })}
+                </select>
 
-                        <input
-                            type="date"
-                            id="c-date"
-                            className="w-full border rounded px-3 py-2"
-                        />
+                <input
+                    type="time"
+                    id="c-end"
+                    className="w-full border rounded px-3 py-2 bg-gray-100 text-gray-600"
+                    disabled
+                />
 
-                        <select
-                            id="c-start"
-                            className="w-full border rounded px-3 py-2"
-                            onChange={(e) => {
-                                const h = e.target.value;
-                                document.getElementById("c-end").value = `${String(Number(h) + 1).padStart(2, "0")}:00`;
-                            }}
-                        >
-                            {Array.from({ length: 11 }).map((_, i) => {
-                                const hour = (8 + i).toString().padStart(2, "0");
-                                return <option key={hour} value={hour}>{hour}:00</option>;
-                            })}
-                        </select>
+                <div className="flex justify-end gap-2">
+                    <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>
+                        Annuler
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={() => {
+                            const d = document.getElementById("c-date").value;
+                            const s = document.getElementById("c-start").value;
+                            const e = document.getElementById("c-end").value;
 
+                            if (!d || !s || !e) {
+                                alert("Veuillez remplir tous les champs");
+                                return;
+                            }
 
-                        <input
-                            type="time"
-                            id="c-end"
-                            className="w-full border rounded px-3 py-2 bg-gray-100 text-gray-600"
-                            disabled
-                        />
-
-                        <div className="flex justify-end gap-2">
-
-                            <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Annuler</Button>
-                            <Button size="sm" onClick={() => {
-                                const d = document.getElementById("c-date").value;
-                                const s = document.getElementById("c-start").value;
-                                const e = document.getElementById("c-end").value;
-
-                                if (!d || !s || !e) {
-                                    alert("Veuillez remplir tous les champs");
-                                    return;
-                                }
-
-                                createCreneau(d, s, e);
-                            }}>Créer</Button>
-                        </div>
-
-                    </div>
+                            createCreneau(d, s, e);
+                        }}
+                    >
+                        Créer
+                    </Button>
                 </div>
-            )}
+            </Modal>
 
-            {showModalDispo && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalDispo(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4" onClick={(e) => e.stopPropagation()}>
-
-                        <h2 className="text-lg font-semibold">
-                            Voulez vous supprimer ce créneau
-                        </h2>
-                        <div className="flex justify-end gap-2">
-
-                            <Button variant="secondary" size="sm" onClick={() => setShowModalDispo(false)}>Annuler</Button>
-                            <Button size="sm" onClick={deleteCreneau}>Supprimer</Button>
-                        </div>
-
-                    </div>
+            <Modal
+                open={showModalDispo}
+                onClose={() => setShowModalDispo(false)}
+                title="Voulez-vous supprimer ce créneau ?"
+            >
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowModalDispo(false)}
+                    >
+                        Annuler
+                    </Button>
+                    <Button size="sm" onClick={deleteCreneau}>
+                        Supprimer
+                    </Button>
                 </div>
-            )}
+            </Modal>
 
-            {showModalOccupe && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModalOccupe(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4" onClick={(e) => e.stopPropagation()}>
-
-                        <h2 className="text-lg font-semibold">
-                            Voici la reservation
-                        </h2>
-                        <div className="flex justify-end gap-2">
-
-                            <Button variant="secondary" size="sm" onClick={() => setShowModalOccupe(false)}>Fermer</Button>
-                            <Button size="sm" onClick={() => { }}>Supprimer</Button>
-                        </div>
-
-                    </div>
+            <Modal
+                open={showModalOccupe}
+                onClose={() => setShowModalOccupe(false)}
+                title="Voici la réservation"
+            >
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowModalOccupe(false)}
+                    >
+                        Fermer
+                    </Button>
+                    <Button size="sm">
+                        Supprimer
+                    </Button>
                 </div>
-            )}
+            </Modal>
 
         </div>
     );

@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Calendar from "./Calendar";
 import Button from "../ui/Button"
+import Modal from "../ui/Modal";
+
 
 
 export default function CalendarClient() {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showModalDelete, setShowModalDelete] = useState(false);
     const [selectedCreneauId, setSelectedCreneauId] = useState(null);
     const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -15,7 +18,7 @@ export default function CalendarClient() {
         const fetchCreneaux = async () => {
             const { data: { session } } = await supabase.auth.getSession();
 
-            const { data: creneaux , error: errorCreneaux } = await supabase
+            const { data: creneaux, error: errorCreneaux } = await supabase
                 .from("creneaux")
                 .select("*")
                 .order("start", { ascending: true });
@@ -25,9 +28,9 @@ export default function CalendarClient() {
                 return;
             }
             const { data: reservations, error: resError } = await supabase
-            .from("reservations")
-            .select("*")
-            .eq("client_id", session.user.id);
+                .from("reservations")
+                .select("*")
+                .eq("client_id", session.user.id);
 
             if (resError) {
                 console.error("Erreur Supabase :", resError);
@@ -65,7 +68,7 @@ export default function CalendarClient() {
             setShowModal(true)
         }
         else if (event.extendedProps.statut === "en_attente") {
-            alert("Vous êtes déjà inscrit à ce créneau !");
+            setShowModalDelete(true);
         }
     };
 
@@ -87,8 +90,30 @@ export default function CalendarClient() {
 
         alert("Votre demande a été envoyée !");
         setShowModal(false);
-        setCurrentDate(new Date()); 
+        setCurrentDate(new Date());
     };
+
+
+    const deleteReservation = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        const { error } = await supabase
+            .from("reservations")
+            .delete()
+            .eq("client_id", session.user.id)
+            .eq("creneau_id", selectedCreneauId);
+
+        if (error) {
+            console.error("Erreur désinscription :", error);
+            return;
+        }
+        alert("Vous êtes désinscrit !");
+        setShowModalDelete(false);
+        setCurrentDate(new Date());
+    };
+
+
+
 
 
     const renderEventContent = (eventInfo) => {
@@ -96,7 +121,7 @@ export default function CalendarClient() {
 
         const bgColor =
             statut === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
-                "bg-purple text-purple-100";
+                "bg-purple text-purple-100 ";
 
         return (
             <div className={`${bgColor} w-full h-full p-1.5 rounded-lg flex flex-col  overflow-hidden `}>
@@ -115,23 +140,44 @@ export default function CalendarClient() {
             />
 
             {/* POP UP */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4 z-60 " onClick={(e) => e.stopPropagation()}>
-
-                        <h2 className="text-lg font-semibold">
-                            Voulez vous vous inscrire a ce créneau ?
-                        </h2>
-
-                        <div className="flex justify-end gap-2">
-
-                            <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Annuler</Button>
-                            <Button size="sm" onClick={createReservation} >S'inscrire</Button>
-                        </div>
-
-                    </div>
+            <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title="Voulez-vous vous inscrire à ce créneau ?"
+            >
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Annuler
+                    </Button>
+                    <Button size="sm" onClick={createReservation}>
+                        S'inscrire
+                    </Button>
                 </div>
-            )}
+            </Modal>
+
+            <Modal
+                open={showModalDelete}
+                onClose={() => setShowModalDelete(false)}
+                title="Voulez-vous vous désinscrire ?"
+            >
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowModalDelete(false)}
+                    >
+                        Annuler
+                    </Button>
+                    <Button size="sm" onClick={deleteReservation}>
+                        Se désinscrire
+                    </Button>
+                </div>
+            </Modal>
+
         </div>
     );
 }

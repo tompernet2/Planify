@@ -74,24 +74,25 @@ export default function CalendarInvite() {
                 renderEventContent={renderEventContent}
             />
 
-            {/* POP UP */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-xl p-6 w-[300px] space-y-4 z-60 " onClick={(e) => e.stopPropagation()}>
-
-                        <h2 className="text-lg font-semibold">
-                            Pour vous inscrire veuillez vous connecter
-                        </h2>
-
-                        <div className="flex justify-end gap-2">
-
-                            <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Annuler</Button>
-                            <Button size="sm" onClick={navigateToLogin}>Se connecter</Button>
-                        </div>
-
-                    </div>
+            <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title="Pour vous inscrire veuillez vous connecter"
+            >
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Annuler
+                    </Button>
+                    <Button size="sm" onClick={navigateToLogin}>
+                        Se connecter
+                    </Button>
                 </div>
-            )}
+            </Modal>
+
         </div>
     );
 }

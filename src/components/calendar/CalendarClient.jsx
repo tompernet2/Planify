@@ -13,25 +13,41 @@ export default function CalendarClient() {
 
     useEffect(() => {
         const fetchCreneaux = async () => {
-            const { data, error } = await supabase
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const { data: creneaux , error: errorCreneaux } = await supabase
                 .from("creneaux")
                 .select("*")
                 .order("start", { ascending: true });
 
-            if (error) {
-                console.error("Erreur Supabase :", error);
+            if (errorCreneaux) {
+                console.error("Erreur Supabase :", errorCreneaux);
+                return;
+            }
+            const { data: reservations, error: resError } = await supabase
+            .from("reservations")
+            .select("*")
+            .eq("client_id", session.user.id);
+
+            if (resError) {
+                console.error("Erreur Supabase :", resError);
                 return;
             }
 
-            const formatted = data.map((c) => ({
-                id: c.id,
-                title: c.status,
-                start: c.start,
-                end: c.end,
-                extendedProps: {
-                    status: c.status
-                },
-            }));
+            const formatted = creneaux.map((c) => {
+                const reservation = reservations.find(r => String(r.creneau_id) === String(c.id));
+
+                return {
+                    id: c.id,
+                    title: reservation ? "En attente" : c.statut, // si réservation => titre En attente
+                    start: c.start,
+                    end: c.end,
+                    extendedProps: {
+                        statut: reservation ? "en_attente" : c.statut, // si réservation => statut en_attente
+                        reservationId: reservation?.id || null
+                    },
+                };
+            });
 
             setEvents(formatted);
         };
@@ -45,8 +61,11 @@ export default function CalendarClient() {
         setSelectedCreneauId(event.id);
         console.log("Creneau sélectionné :", event.id);
 
-        if (event.extendedProps.status === "disponible") {
+        if (event.extendedProps.statut === "disponible") {
             setShowModal(true)
+        }
+        else if (event.extendedProps.statut === "en_attente") {
+            alert("Vous êtes déjà inscrit à ce créneau !");
         }
     };
 
@@ -73,10 +92,10 @@ export default function CalendarClient() {
 
 
     const renderEventContent = (eventInfo) => {
-        const status = eventInfo.event.extendedProps.status;
+        const statut = eventInfo.event.extendedProps.statut;
 
         const bgColor =
-            status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
+            statut === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
                 "bg-purple text-purple-100";
 
         return (

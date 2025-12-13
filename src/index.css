@@ -43,11 +43,15 @@ body {
   --color-purple-200: #973AEB;  
   --color-purple-hover: #BD94F2;  
 }
-.fc-event, .fc-event-main {
+.fc-event, 
+.fc-event-main, 
+.fc-event-frame, 
+.fc-event-bg {
     background: none !important;
     border: none !important;
-    border-radius:12px;
+    box-shadow: none !important;
 }
+
 
 
 

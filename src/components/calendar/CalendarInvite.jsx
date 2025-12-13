@@ -25,11 +25,11 @@ export default function CalendarInvite() {
 
             const formatted = data.map((c) => ({
                 id: c.id,
-                title: c.status,
+                title: c.statut,
                 start: c.start,
                 end: c.end,
                 extendedProps: {
-                    status: c.status
+                    statut: c.statut
                 },
             }));
 
@@ -45,17 +45,17 @@ export default function CalendarInvite() {
 
     const handleEventClick = (info) => {
         const event = info.event;
-        if (event.extendedProps.status === "disponible") {
+        if (event.extendedProps.statut === "disponible") {
             setShowModal(true)
         }
     };
 
 
     const renderEventContent = (eventInfo) => {
-        const status = eventInfo.event.extendedProps.status;
+        const statut = eventInfo.event.extendedProps.statut;
 
         const bgColor =
-            status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
+            statut === "disponible" ? "bg-green text-green-100 hover:bg-green-hover cursor-pointer" :
                 "bg-purple text-purple-100";
 
         return (

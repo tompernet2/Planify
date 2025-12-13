@@ -27,11 +27,11 @@ export default function CalendarAdmin() {
 
             const formatted = data.map((c) => ({
                 id: c.id,
-                title: c.status,
+                title: c.statut,
                 start: c.start,
                 end: c.end,
                 extendedProps: {
-                    status: c.status
+                    statut: c.statut
                 },
             }));
 
@@ -48,7 +48,7 @@ export default function CalendarAdmin() {
 
         const { error } = await supabase
             .from("creneaux")
-            .insert([{ start, end, status: "disponible" }]);
+            .insert([{ start, end, statut: "disponible" }]);
 
         if (error) {
             console.error("Erreur création créneau :", error);
@@ -80,7 +80,7 @@ export default function CalendarAdmin() {
         const event = info.event;
         setSelectedCreneauId(event.id);
 
-        if (event.extendedProps.status === "occupe") {
+        if (event.extendedProps.statut === "occupe") {
             setShowModalOccupe(true)
              // a completer avec les infos de la réservation
         }
@@ -91,10 +91,10 @@ export default function CalendarAdmin() {
 
 
     const renderEventContent = (eventInfo) => {
-        const status = eventInfo.event.extendedProps.status;
+        const statut = eventInfo.event.extendedProps.statut;
 
         const bgColor =
-            status === "disponible" ? "bg-green text-green-100 hover:bg-green-hover" :
+            statut === "disponible" ? "bg-green text-green-100 hover:bg-green-hover" :
                     "bg-purple text-purple-100 hover:bg-purple-hover";
 
         return (

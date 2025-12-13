@@ -5,7 +5,7 @@ import Button from "../ui/Button"
 import { useNavigate } from "react-router-dom";
 
 
-export default function CalendarAdmin() {
+export default function CalendarInvite() {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();

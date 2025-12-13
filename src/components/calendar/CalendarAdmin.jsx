@@ -60,7 +60,6 @@ export default function CalendarAdmin() {
 
     // SUPPRIMER CRÉNEAU DISPO
     const deleteCreneau = async () => {
-        if (!selectedCreneauId) return;
 
         const { error } = await supabase
             .from("creneaux")
@@ -79,14 +78,14 @@ export default function CalendarAdmin() {
 
     const handleEventClick = (info) => {
         const event = info.event;
+        setSelectedCreneauId(event.id);
 
         if (event.extendedProps.status === "occupe") {
             setShowModalOccupe(true)
-            setSelectedCreneauId(event.id); // a completer avec les infos de la réservation
+             // a completer avec les infos de la réservation
         }
         else {
             setShowModalDispo(true)
-            setSelectedCreneauId(event.id);
         }
     };
 

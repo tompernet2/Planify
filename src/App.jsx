@@ -34,7 +34,6 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reservation" element={<Wrapper><Reservation /></Wrapper>} />
-
         </Routes>
       </div>
     </BrowserRouter>

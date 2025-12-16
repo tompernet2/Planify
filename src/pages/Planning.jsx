@@ -55,7 +55,7 @@ function Planning() {
   }, []);
 
   return (
-    <div className="p-2">
+    <div >
 
       {user && role === "admin" && <CalendarAdmin />}
       {user && role === "client" && <CalendarClient />}

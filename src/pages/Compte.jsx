@@ -46,7 +46,7 @@ function Compte() {
     if (!user || !profiles) return null;
 
     return (
-        <div className="p-4 m-5 rounded-2xl">
+        <div className="rounded-2xl">
             <h1 className="text-2xl font-bold mb-4">Bonjour, {profiles.prenom}</h1>
 
             <div className="bg-cream-100 text-secondary p-4 rounded-2xl inline-block max-w-full break-words">
